@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour {
-    protected GameObject[] pauseObjects;
-    protected bool gameIsPaused;    
+    protected GameObject[] playerTurnObjects;
+    protected bool gameIsPaused;
+    public float turnTimer = 2.5f;
 
     // Use this for initialization
     void Start() {
-        Time.timeScale = 0;
-        gameIsPaused = true;
-        //pauseObjects = GameObject.FindGameObjectsWithTag("ShowOnPause");
-        //hidePaused();
+        Time.timeScale = 1;
+        gameIsPaused = false;
+        playerTurnObjects = GameObject.FindGameObjectsWithTag("PlayerTurn");
+        hidePaused();
     }
 
     // Update is called once per frame
@@ -43,17 +44,17 @@ public class UIManager : MonoBehaviour {
         if (Time.timeScale == 1) {
             Time.timeScale = 0;
             gameIsPaused = true;
-            //showPaused();
+            showPaused();
         } else if (Time.timeScale == 0) {
             Time.timeScale = 1;
             gameIsPaused = false;
-            //hidePaused();
+            hidePaused();
         }
     }
 
     //controls the end turn button
     public void EndTurn() {
-        StartCoroutine(EndTurnTimer(3));
+        StartCoroutine(EndTurnTimer(turnTimer));
     }
 
     public IEnumerator WaitFrame() {
@@ -62,14 +63,18 @@ public class UIManager : MonoBehaviour {
 
     public IEnumerator EndTurnTimer(float seconds) {
         Time.timeScale = 1;
+        gameIsPaused = false;
+        hidePaused();
         yield return new WaitForSecondsRealtime(seconds);
         Time.timeScale = 0;
+        gameIsPaused = true;
+        showPaused();
     }
 
     //shows objects with ShowOnPause tag
     public void showPaused() {
-        if (pauseObjects != null) {
-            foreach (GameObject g in pauseObjects) {
+        if (playerTurnObjects != null) {
+            foreach (GameObject g in playerTurnObjects) {
                 g.SetActive(true);
             }
         }
@@ -77,8 +82,8 @@ public class UIManager : MonoBehaviour {
 
     //hides objects with ShowOnPause tag
     public void hidePaused() {
-        if (pauseObjects != null) {
-            foreach (GameObject g in pauseObjects) {
+        if (playerTurnObjects != null) {
+            foreach (GameObject g in playerTurnObjects) {
                 g.SetActive(false);
             }
         }
