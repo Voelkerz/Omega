@@ -2,21 +2,24 @@ using UnityEditor;
 using UnityEngine;
 
 public class BezierCurveTest : MonoBehaviour {
-    public Vector3 startPosition;
-    public Vector3 endPosition;
-    public Vector3 startTangent;
-    public Vector3 endTangent;
+    public Transform startPosition;
+    public Transform endPosition;
+    private Vector3 startTangent;
+    private Vector3 endTangent;
     public Color color;
     public Texture2D texture;
     public float width;
 
     // Start is called before the first frame update
     void Start() {
-        Handles.DrawBezier(startPosition, endPosition, startTangent, endTangent, color, texture, width);
+        startTangent = startPosition.position;
+        endTangent = startPosition.position + (startPosition.forward * 10);
+
+
     }
 
     // Update is called once per frame
     void Update() {
-        
+        Handles.DrawBezier(startPosition.position, endPosition.position, startTangent, endTangent, color, texture, width);
     }
 }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - PlayerTurn
+  - MovementReticule
   layers:
   - Default
   - TransparentFX
